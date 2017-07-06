@@ -16,7 +16,9 @@ xml.title "#{variant.product.name} #{variant_options variant}"
 xml.description variant.product.description
 xml.link @production_domain + 'products/' + variant.product.slug
 xml.tag! "sku", variant.sku.to_s
-xml.tag! "brand", brand.value if brand
+xml.tag! "mpn", variant.sku.to_s
+# xml.tag! "brand", brand.value if brand
+xml.tag! "brand", "Dapper"
 xml.tag! "department", department.value if department
 xml.tag! "image", variant.product.images.first.attachment.url(:product) unless variant.product.images.empty?
 xml.tag! "color", color.value if color
