@@ -17,7 +17,7 @@ xml.rss "version" => "2.0", "xmlns:g" => "http://base.google.com/ns/1.0" do
       #   end
       # else
         xml.item do
-          xml << render(:partial => 'product_attributes', :locals => { :variant => product.master })
+          xml << render(:partial => 'product_attributes', :locals => { :product => product })
         end
       # end
     end

@@ -6,27 +6,27 @@ google_merchant_department       = Spree::Property.where(name: "google_merchant_
 google_merchant_color            = Spree::Property.where(name: "google_merchant_color").first
 google_merchant_gtin             = Spree::Property.where(name: "google_merchant_gtin").first
 
-category   = variant.product.product_properties.where(property_id: google_merchant_product_category.id).first if google_merchant_product_category
-brand      = variant.product.product_properties.where(property_id: google_merchant_brand.id).first            if google_merchant_brand
-department = variant.product.product_properties.where(property_id: google_merchant_department.id).first       if google_merchant_department
-color      = variant.product.product_properties.where(property_id: google_merchant_color.id).first            if google_merchant_color
-gtin       = variant.product.product_properties.where(property_id: google_merchant_gtin.id).first             if google_merchant_gtin
+category   = product.product_properties.where(property_id: google_merchant_product_category.id).first if google_merchant_product_category
+brand      = product.product_properties.where(property_id: google_merchant_brand.id).first            if google_merchant_brand
+department = product.product_properties.where(property_id: google_merchant_department.id).first       if google_merchant_department
+color      = product.product_properties.where(property_id: google_merchant_color.id).first            if google_merchant_color
+gtin       = product.product_properties.where(property_id: google_merchant_gtin.id).first             if google_merchant_gtin
 
-xml.title "#{variant.product.name} #{variant_options variant}"
-xml.description variant.product.description
-xml.link @production_domain + 'products/' + variant.product.slug
-xml.tag! "sku", variant.sku.to_s
-xml.tag! "mpn", variant.sku.to_s
+xml.title product.name
+xml.description product.description
+xml.link @production_domain + 'products/' + product.slug
+xml.tag! "sku", product.sku.to_s
+xml.tag! "g:mpn", product.sku.gsub(/[^0-9a-z ]/i, '')
 # xml.tag! "brand", brand.value if brand
-xml.tag! "brand", "Dapper"
+xml.tag! "g:brand", "Dapper"
 xml.tag! "department", department.value if department
-xml.tag! "image", variant.product.images.first.attachment.url(:product) unless variant.product.images.empty?
-xml.tag! "color", color.value if color
-xml.tag! "GTIN", gtin.value if gtin
-xml.tag! "g:price", variant.price
+xml.tag! "image", product.images.first.attachment.url(:product) unless product.images.empty?
+xml.tag! "g:color", color.value if color
+xml.tag! "g:gtin", gtin.value if gtin
+xml.tag! "g:price", product.price
 xml.tag! "g:google_product_category", category.value if category
 xml.tag! "g:product_type", category.value if category
-xml.tag! "g:id", variant.sku.to_s
-xml.tag! "g:condition", "new"
-xml.tag! "g:availability", Spree::Stock::Quantifier.new(variant).total_on_hand > 0 ? 'in stock' : 'out of stock'
-xml.tag! "shipping_weight", variant.weight.to_s
+xml.tag! "g:id", product.id
+xml.tag! "g:condition", "New"
+xml.tag! "g:availability", product.master.stock_items.sum(:count_on_hand) > 0 ? 'In Stock' : 'Out of Stock'
+xml.tag! "g:shipping_weight", product.weight.to_s if product.weight.present?
