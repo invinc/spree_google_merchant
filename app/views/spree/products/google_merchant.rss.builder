@@ -16,10 +16,11 @@ xml.rss "version" => "2.0", "xmlns:g" => "http://base.google.com/ns/1.0" do
       #     end
       #   end
       # else
+      if product.price && product.price > 0 && product.sku.present?
         xml.item do
           xml << render(:partial => 'product_attributes', :locals => { :product => product })
         end
-      # end
+      end
     end
   end
 end
