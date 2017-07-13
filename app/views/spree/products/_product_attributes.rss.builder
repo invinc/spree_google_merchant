@@ -20,7 +20,7 @@ xml.tag! "g:mpn", product.sku.gsub(/[^0-9a-z ]/i, '')
 # xml.tag! "brand", brand.value if brand
 xml.tag! "g:brand", "Dapper"
 xml.tag! "department", department.value if department
-xml.tag! "image", product.images.first.attachment.url(:product) unless product.images.empty?
+xml.tag! "g:image_link", @production_domain + product.images.first.attachment.url(:product) unless product.images.empty?
 xml.tag! "g:color", color.value if color
 xml.tag! "g:gtin", gtin.value if gtin
 xml.tag! "g:price", product.price
